@@ -184,15 +184,15 @@
     if (!layer) return;
 
     const LEAF_IMAGES = [
-      'url("images/autumn/maple_01.png")',
-      'url("images/autumn/maple_02.png")',
-      'url("images/autumn/maple_03.png")',
-      'url("images/autumn/maple_04.png")',
-      'url("images/autumn/maple_05.png")',
-      'url("images/autumn/maple_06.png")',
-      'url("images/autumn/maple_07.png")',
-      'url("images/autumn/maple_08.png")',
-      'url("images/autumn/maple_09.png")'
+      'url("../images/autumn/maple_01.png")',
+      'url("../images/autumn/maple_02.png")',
+      'url("../images/autumn/maple_03.png")',
+      'url("../images/autumn/maple_04.png")',
+      'url("../images/autumn/maple_05.png")',
+      'url("../images/autumn/maple_06.png")',
+      'url("../images/autumn/maple_07.png")',
+      'url("../images/autumn/maple_08.png")',
+      'url("../images/autumn/maple_09.png")'
     ];
 
     const isMobile = matchMedia("(max-width: 768px)").matches;
