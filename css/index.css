@@ -292,9 +292,9 @@ body.season-autumn #mapleLayer{ display:block; }
 
 /* accessibility */
 @media (prefers-reduced-motion: reduce){
-  #snowFlicker .snow,
-  .petalItem,
-  #trail-up, #trail-down, #firework-burst,
-  .maple-leaf{ animation: none !important; transition: none !important; }
-  #petalBlizzard, #mapleLayer{ display:none !important; }
+  body:not(.force-motion) #snowFlicker .snow,
+  body:not(.force-motion) .petalItem,
+  body:not(.force-motion) #trail-up, body:not(.force-motion) #trail-down, body:not(.force-motion) #firework-burst,
+  body:not(.force-motion) .maple-leaf{ animation: none !important; transition: none !important; }
+  body:not(.force-motion) #petalBlizzard, body:not(.force-motion) #mapleLayer{ display:none !important; }
 }
