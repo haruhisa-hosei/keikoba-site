@@ -1,70 +1,76 @@
-/* =========================
-   Unified index (5 seasons)
-   ========================= */
+/* =========================================================
+   Unified seasonal index styles (keikoba-site)
+   - Assets:
+     images/common/*   (shared)
+     images/winter/*   images/spring/*   images/summer/*   images/autumn/*
+   - This CSS lives in: css/index.css  (so use ../images/...)
+   ========================================================= */
 
-/* ---- base ---- */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: 'Zen Old Mincho', serif;
-  background-color: #f4f1e8;
-  overflow: hidden;
+/* ===== Base ===== */
+html, body{
+  margin:0;
+  padding:0;
+  height:100%;
+  font-family:'Zen Old Mincho', serif;
+  background-color:#f4f1e8;
+  overflow:hidden;
 }
 
-.main-link-container {
-  display: block;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-decoration: none;
-  color: inherit;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  z-index: 2; /* 本文 */
+.main-link-container{
+  display:block;
+  position:relative;
+  width:100%;
+  height:100%;
+  text-decoration:none;
+  color:inherit;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  z-index:2; /* always above seasonal layers */
 }
 
-.content-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: row-reverse;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
-  max-width: 1000px;
+.content-wrapper{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  display:flex;
+  flex-direction:row-reverse;
+  align-items:center;
+  justify-content:center;
+  width:80%;
+  max-width:1000px;
 }
 
-.phoenix-wrapper {
-  position: relative;
-  width: 50%;
-  max-width: 500px;
-  aspect-ratio: 4 / 3;
-  margin-left: -50px;
-  transform-origin: center center;
+/* Phoenix */
+.phoenix-wrapper{
+  position:relative;
+  width:50%;
+  max-width:500px;
+  aspect-ratio:4/3;
+  margin-left:-50px;
+  transform-origin:center center;
 }
-.phoenix-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: auto;
-  backface-visibility: hidden;
+.phoenix-image{
+  position:absolute;
+  top:0; left:0;
+  width:100%;
+  height:auto;
+  backface-visibility:hidden;
 }
-.img-1 { opacity: 1; z-index: 2; }
-.img-2 { opacity: 0; z-index: 1; }
 
-.title-area { writing-mode: vertical-rl; z-index: 1; }
+/* flap images */
+.img-1{ opacity:1; z-index:2; }
+.img-2{ opacity:0; z-index:1; }
+
+.title-area{ writing-mode:vertical-rl; z-index:1; }
 
 h1{
-  font-size: clamp(2.5rem, 6vw, 5rem);
-  letter-spacing: 0.5em;
-  margin: 0;
-  font-weight: 500;
-  line-height: 1.5;
-  color: #1a2a40;
+  font-size:clamp(2.5rem,6vw,5rem);
+  letter-spacing:0.5em;
+  margin:0;
+  font-weight:500;
+  line-height:1.5;
+  color:#1a2a40;
   text-shadow:
     1px 1px 2px rgba(255,255,255,0.6),
     -1px 1px 2px rgba(255,255,255,0.6),
@@ -72,207 +78,232 @@ h1{
     -1px -1px 2px rgba(255,255,255,0.6);
 }
 
-/* intro fade */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.fade-in { opacity: 0; animation: fadeIn 2.1s ease-out forwards; }
-.fade-in-title { opacity: 0; animation: fadeIn 2.1s ease-out 0.5s forwards; }
+/* fade-in */
+@keyframes fadeIn{
+  from{ opacity:0; transform:translateY(20px); }
+  to{ opacity:1; transform:translateY(0); }
+}
+.fade-in{ opacity:0; animation:fadeIn 2.1s ease-out forwards; }
+.fade-in-title{ opacity:0; animation:fadeIn 2.1s ease-out .5s forwards; }
 
-/* click fly */
-@keyframes flyMove { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translate(-250px, -300px) scale(0.6); opacity: 0; } }
-@keyframes flap-img1 { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-@keyframes flap-img2 { 0%, 49% { opacity: 0; } 50%, 100% { opacity: 1; } }
-.is-flying { animation: flyMove 1.2s ease-in forwards !important; }
-.is-flying .img-1 { animation: flap-img1 0.2s steps(1) infinite; }
-.is-flying .img-2 { animation: flap-img2 0.2s steps(1) infinite; }
-.is-fading-out { transition: opacity 0.5s ease; opacity: 0 !important; }
+/* click fly-away */
+@keyframes flyMove{
+  0%{ transform:translateY(0) scale(1); opacity:1; }
+  100%{ transform:translate(-250px,-300px) scale(.6); opacity:0; }
+}
+@keyframes flap-img1{ 0%,49%{opacity:1;} 50%,100%{opacity:0;} }
+@keyframes flap-img2{ 0%,49%{opacity:0;} 50%,100%{opacity:1;} }
 
-@media (max-width: 768px) {
-  .content-wrapper { flex-direction: column; width: 90%; }
-  .title-area { writing-mode: horizontal-tb; margin-top: 20px; }
-  .phoenix-wrapper { width: 70%; margin-left: 0; }
-  h1 { font-size: 2rem; letter-spacing: 0.2em; }
+.is-flying{ animation:flyMove 1.2s ease-in forwards !important; }
+.is-flying .img-1{ animation:flap-img1 .2s steps(1) infinite; }
+.is-flying .img-2{ animation:flap-img2 .2s steps(1) infinite; }
+.is-fading-out{ transition:opacity .5s ease; opacity:0 !important; }
+
+@media (max-width:768px){
+  .content-wrapper{ flex-direction:column; width:90%; }
+  .title-area{ writing-mode:horizontal-tb; margin-top:20px; }
+  .phoenix-wrapper{ width:70%; margin-left:0; }
+  h1{ font-size:2rem; letter-spacing:.2em; }
 }
 
-/* =========================
-   Season layer visibility
-   ========================= */
-#winterOverlay, #snowFlicker,
-#springOverlay, #petalBlizzard,
-#summerOverlay, #firework-layer,
-#autumnBg, #mapleLayer{
-  display: none;
+/* =========================================================
+   Seasonal layers: default OFF, enabled by body.season-*
+   ========================================================= */
+
+/* ----- Background overlays ----- */
+#plainOverlay, #winterOverlay, #springOverlay, #summerOverlay, #autumnBg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .2s ease;
+  transform:translateZ(0);
 }
 
-/* =========================
-   WINTER (12-2)
-   ========================= */
-body.season-winter #winterOverlay,
-body.season-winter #snowFlicker{ display:block; }
+/* Plain: gentle paper texture (optional). Keep empty => uses bg-color. */
+#plainOverlay{ background:none; }
 
+/* Winter */
 #winterOverlay{
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url("../images/winter/keikoba_winter_bk.jpg") center / cover no-repeat;
-  opacity: 0.88;
-  filter: brightness(0.95) contrast(1.05);
-  transform: translateZ(0);
+  background:url("../images/winter/keikoba_winter_bk.jpg") center bottom / cover no-repeat;
+  filter:brightness(.78) contrast(1.15);
 }
 
-/* snow flicker + fall */
+/* Spring */
+#springOverlay{
+  background:url("../images/spring/keikoba_spring_bk.jpg") center bottom / cover no-repeat;
+  filter:brightness(.88) contrast(1.06);
+}
+
+/* Summer */
+#summerOverlay{
+  background:url("../images/summer/keikoba_firework_bk.PNG") center bottom / cover no-repeat;
+  filter:brightness(.78) contrast(1.15);
+}
+
+/* Autumn */
+#autumnBg{
+  background:url("../images/autumn/keikoba_autumn_bk.jpg") center / cover no-repeat;
+  filter:brightness(.92) contrast(1.06);
+}
+
+/* Enable background by season */
+body.season-plain  #plainOverlay{ opacity:0; }
+body.season-winter #winterOverlay{ opacity:.70; }
+body.season-spring #springOverlay{ opacity:.70; }
+body.season-summer #summerOverlay{ opacity:.70; }
+body.season-autumn #autumnBg{ opacity:.85; }
+
+/* ----- Winter snow flicker + fall ----- */
+#snowFlicker, #snowFallLayer{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  display:none;
+}
+
+body.season-winter #snowFlicker,
+body.season-winter #snowFallLayer{
+  display:block;
+}
+
 #snowFlicker{
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  overflow: hidden;
+  filter:contrast(1.12);
 }
+
 #snowFlicker .snow{
-  position: absolute;
-  inset: -10vh 0 -10vh 0;
-  background-repeat: repeat;
-  background-size: 420px 420px;
-  opacity: 0;
-  animation: snow-flicker 6.2s linear infinite;
-  mix-blend-mode: screen;
-}
-#snowFlicker .l1{ background-image: url("../images/winter/snow_1.png"); animation-delay: 0s; }
-#snowFlicker .l2{ background-image: url("../images/winter/snow_2.png"); animation-delay: 1.2s; }
-#snowFlicker .l3{ background-image: url("../images/winter/snow_3.png"); animation-delay: 2.4s; }
-#snowFlicker .l4{ background-image: url("../images/winter/snow_4.png"); animation-delay: 3.6s; }
-
-@keyframes snow-flicker{
-  0%   { opacity: 0; transform: translateY(-12vh); }
-  12%  { opacity: .18; }
-  50%  { opacity: .26; transform: translateY(12vh); }
-  80%  { opacity: .08; }
-  100% { opacity: 0; transform: translateY(18vh); }
+  position:absolute;
+  inset:0;
+  background-repeat:repeat;
+  background-size:900px 900px;
+  opacity:0;
+  animation-timing-function:steps(1);
+  transform:translateZ(0);
+  will-change:opacity;
+  background-position:0 -300px;
 }
 
-/* =========================
-   SPRING (3-4)
-   ========================= */
-body.season-spring #springOverlay,
+.snow-t1{ background-image:url("../images/winter/white_dots_transparent_1.png"); animation:f1 2.8s infinite; }
+.snow-t2{ background-image:url("../images/winter/white_dots_transparent_2.png"); animation:f2 3.2s infinite; }
+.snow-w { background-image:url("../images/winter/white_dots_density_weak.png");  animation:f3 4.2s infinite; }
+.snow-m { background-image:url("../images/winter/white_dots_density_medium.png");animation:f4 3.6s infinite; }
+.snow-s { background-image:url("../images/winter/white_dots_density_strong.png"); animation:f5 8.0s infinite; }
+
+@keyframes f1{0%{opacity:.04}30%{opacity:.16}55%{opacity:.05}75%{opacity:.18}100%{opacity:.07}}
+@keyframes f2{0%{opacity:.10}18%{opacity:.03}48%{opacity:.14}72%{opacity:.04}100%{opacity:.09}}
+@keyframes f3{0%{opacity:.05}35%{opacity:.11}65%{opacity:.04}100%{opacity:.06}}
+@keyframes f4{0%{opacity:0}40%{opacity:.10}70%{opacity:.03}100%{opacity:.05}}
+@keyframes f5{0%{opacity:0}74%{opacity:0}78%{opacity:.08}82%{opacity:0}92%{opacity:.06}100%{opacity:0}}
+
+/* falling layer */
+#snowFallLayer{ overflow:hidden; }
+#snowFallLayer .fall{
+  position:absolute;
+  inset:0;
+  background-image:url("../images/winter/white_dots_density_medium.png");
+  background-repeat:repeat;
+  background-size:900px 900px;
+  opacity:0.0;
+  filter:brightness(1.25) contrast(1.15);
+  animation:snowFallMove 22s linear infinite;
+}
+#snowFallLayer .l1{ transform:translateY(0px);   animation-delay:0s; }
+#snowFallLayer .l2{ transform:translateY(100px); animation-delay:5.5s; }
+#snowFallLayer .l3{ transform:translateY(200px); animation-delay:11s; }
+#snowFallLayer .l4{ transform:translateY(300px); animation-delay:16.5s; }
+
+@keyframes snowFallMove{
+  0%{ background-position:0 -300px; opacity:.04; }
+  30%{ opacity:.10; }
+  60%{ opacity:.18; }
+  100%{ background-position:0 700px; opacity:.26; }
+}
+
+/* ----- Spring petals (JS creates img.petalItem inside #petalBlizzard) ----- */
+#petalBlizzard{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+  display:none;
+}
 body.season-spring #petalBlizzard{ display:block; }
 
-#springOverlay{
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url("../images/spring/keikoba_spring_bk.jpg") center / cover no-repeat;
-  opacity: 0.92;
-  filter: brightness(0.95) contrast(1.05);
-  transform: translateZ(0);
+#petalBlizzard .petalItem{
+  position:absolute;
+  top:-15vh;
+  left:0;
+  width:var(--size, 22px);
+  height:auto;
+  opacity:var(--op, .75);
+  transform:translate3d(0,-15vh,0) rotate(0deg);
+  will-change:transform;
+  filter:blur(var(--blur, 0px));
+  animation:petalFall var(--dur, 16s) linear var(--delay, 0s) 1;
+}
+@keyframes petalFall{
+  0%{ transform:translate3d(0,-15vh,0) rotate(0deg); }
+  100%{ transform:translate3d(var(--drift, 120px),110vh,0) rotate(var(--rot, 720deg)); }
 }
 
-#petalBlizzard{
-  position: fixed;
-  inset: 0;
-  z-index: 3; /* 本文より上 */
-  pointer-events: none;
-  overflow: hidden;
+/* ----- Summer fireworks (JS drives clip-path) ----- */
+#firework-layer{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  overflow:hidden;
+  z-index:1;
+  display:none;
 }
-.petalItem{
-  position: absolute;
-  top: -10vh;
-  width: var(--size, 22px);
-  height: var(--size, 22px);
-  opacity: var(--op, .65);
-  filter: blur(var(--blur, 0px));
-  will-change: transform, opacity;
-  transform: translate3d(0,0,0) rotate(0deg);
-  animation: petal-fall var(--dur, 14s) linear both;
-}
-@keyframes petal-fall{
-  to{
-    transform:
-      translate3d(var(--drift, 0px), 120vh, 0)
-      rotate(var(--rot, 720deg));
-  }
-}
-
-/* =========================
-   SUMMER (7-8)
-   ========================= */
-body.season-summer #summerOverlay,
 body.season-summer #firework-layer{ display:block; }
 
-#summerOverlay{
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url("../images/summer/keikoba_firework_bk.PNG") center bottom / cover no-repeat;
-  opacity: 0.7;
-  filter: brightness(0.78) contrast(1.15);
-  transform: translateZ(0);
-}
-
-#firework-layer{
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 3;
-}
 #firework-layer img{
-  mix-blend-mode: screen;
-  object-position: center bottom;
+  mix-blend-mode:screen;
+  object-position:center bottom;
 }
-#trail-up, #trail-down, #firework-burst{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center bottom;
-  opacity: 0;
-  mix-blend-mode: screen;
-  will-change: clip-path, opacity, transform, filter;
-}
-#trail-up{ transform-origin: bottom center; }
-#trail-down{ transform-origin: top center; }
-#firework-burst{ transform-origin: 70% 35%; }
 
-/* =========================
-   AUTUMN (9-11)
-   ========================= */
-body.season-autumn #autumnBg,
+#trail-up, #trail-down, #firework-burst{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center bottom;
+  opacity:0;
+  mix-blend-mode:screen;
+  will-change:clip-path, opacity, transform, filter;
+}
+#trail-up{ transform-origin:bottom center; }
+#trail-down{ transform-origin:top center; }
+#firework-burst{ transform-origin:70% 35%; }
+
+/* ----- Autumn maple leaves (JS creates div.maple-leaf) ----- */
+#mapleLayer{
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  overflow:hidden;
+  display:none;
+}
 body.season-autumn #mapleLayer{ display:block; }
 
-#autumnBg{
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: url("../images/autumn/keikoba_autumn_bk.jpg") center / cover no-repeat;
-  opacity: 0.85;
-  filter: brightness(0.92) contrast(1.06);
-  transform: translateZ(0);
-}
-
-#mapleLayer{
-  position: fixed;
-  inset: 0;
-  z-index: 3;
-  pointer-events: none;
-  overflow: hidden;
-}
 .maple-leaf{
-  position: absolute;
-  top: -15vh;
-  width: var(--size, 60px);
-  height: var(--size, 60px);
-  background-image: var(--img);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: var(--op, 0.8);
-  transform: translate3d(0,0,0) rotate(var(--rot, 0deg));
-  will-change: transform;
-  filter: drop-shadow(0 2px 2px rgba(0,0,0,.10));
+  position:absolute;
+  top:-15vh;
+  width:var(--size, 60px);
+  height:var(--size, 60px);
+  background-image:var(--img);
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+  opacity:var(--op, .8);
+  transform:translate3d(0,0,0) rotate(var(--rot, 0deg));
+  will-change:transform;
+  filter:drop-shadow(0 2px 2px rgba(0,0,0,.10));
   animation:
     maple-fall var(--dur, 14s) linear var(--delay, 0s) infinite,
     maple-sway var(--swayDur, 3.2s) ease-in-out calc(var(--delay, 0s) * 0.7) infinite;
@@ -280,21 +311,15 @@ body.season-autumn #mapleLayer{ display:block; }
 @keyframes maple-fall{
   to{
     transform:
-      translate3d(var(--dx, 0px), 115vh, 0)
+      translate3d(var(--dx, 0px),115vh,0)
       rotate(calc(var(--rot, 0deg) + var(--spin, 720deg)));
   }
 }
 @keyframes maple-sway{
-  0%{ margin-left: 0; }
-  50%{ margin-left: var(--sway, 0px); }
-  100%{ margin-left: 0; }
+  0%{ margin-left:0; }
+  50%{ margin-left:var(--sway, 0px); }
+  100%{ margin-left:0; }
 }
-
-/* accessibility */
 @media (prefers-reduced-motion: reduce){
-  body:not(.force-motion) #snowFlicker .snow,
-  body:not(.force-motion) .petalItem,
-  body:not(.force-motion) #trail-up, body:not(.force-motion) #trail-down, body:not(.force-motion) #firework-burst,
-  body:not(.force-motion) .maple-leaf{ animation: none !important; transition: none !important; }
-  body:not(.force-motion) #petalBlizzard, body:not(.force-motion) #mapleLayer{ display:none !important; }
+  #snowFlicker, #snowFallLayer, #petalBlizzard, #firework-layer, #mapleLayer{ display:none !important; }
 }
