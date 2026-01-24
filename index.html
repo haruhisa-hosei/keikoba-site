@@ -10,7 +10,15 @@
 
   <script>
     (function () {
-      const month = new Date().getMonth() + 1; // 1-12
+      // ▼ URLパラメータ ?m=月 を優先（テスト用）
+      const params = new URLSearchParams(location.search);
+      const forcedMonth = parseInt(params.get("m"), 10);
+
+      const month =
+        forcedMonth >= 1 && forcedMonth <= 12
+          ? forcedMonth
+          : new Date().getMonth() + 1; // 1-12
+
       let target = "keikobahp-index-plain";
 
       if (month === 12 || month === 1 || month === 2) {
