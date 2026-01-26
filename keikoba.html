@@ -43,7 +43,7 @@
 <!-- Hero -->
 <section id="home">
   <section class="main-text" id="intro">
-<div class="text-lines">
+<div class="text-lines" id="introTextLines">
 <div class="text-line">心静かに</div>
 <div class="text-line">音と向き合う</div>
 <div class="text-line">　</div>
@@ -200,6 +200,12 @@
     © 鳳聲晴久
   </footer>
 
+  <!-- Intro API (Cloudflare Worker) : LINEの最新メッセージを表示 -->
+  <script>
+    // ここを独自ドメインに切り替える場合は、このURLだけ差し替えればOK
+    // 例: https://api.edomatsuribayashi.com/intro
+    window.KEIKO_INTRO_API = "https://dic706.workers.dev/intro";
+  </script>
   <script src="js/keikoba.js" defer></script>
 </body>
 </html>
