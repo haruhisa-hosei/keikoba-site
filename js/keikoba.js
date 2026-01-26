@@ -29,11 +29,23 @@ async function loadLatestIntro() {
     const lines = text.replace(/\r\n/g, '\n').split('\n');
 
     target.innerHTML = '';
-    lines.forEach((line) => {
+
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    lines.forEach((line, i) => {
       const div = document.createElement('div');
       div.className = 'text-line';
       div.textContent = line === '' ? '　' : line; // 空行は全角スペースで高さ維持
       target.appendChild(div);
+
+      // 生成した行にも確実に「ふわっ」が掛かるように、順番に is-show を付与
+      if (!reduceMotion) {
+        requestAnimationFrame(() => {
+          setTimeout(() => div.classList.add('is-show'), 80 + i * 140);
+        });
+      } else {
+        div.classList.add('is-show');
+      }
     });
   } catch (e) {
     console.log('intro fetch failed', e);
