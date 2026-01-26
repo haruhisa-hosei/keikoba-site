@@ -1,78 +1,205 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>鳳聲晴久 稽古場｜東京・千葉の篠笛・能管教室</title>
+  <meta name="description" content="篠笛・能管奏者 鳳聲晴久の稽古場（東京・千葉）公式サイト。初心者から経験者まで、江戸囃子や長唄、独奏曲の個人稽古を行っています。心静かに音と向き合う時間を。"/>
 
-<title>鳳聲晴久 稽古場</title>
+  <meta property="og:title" content="鳳聲晴久 稽古場｜東京・千葉の篠笛・能管教室"/>
+  <meta property="og:description" content="篠笛・能管奏者 鳳聲晴久の稽古場。心静かに音と向き合う、伝統芸能の学びの場。"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://www.edomatsuribayashi.com/"/>
+  <meta property="og:image" content="https://www.edomatsuribayashi.com/images/ogp_phoenix.png"/>
+  <meta name="twitter:card" content="summary_large_image"/>
 
-<link rel="stylesheet" href="keikoba.css">
+  <link rel="icon" type="image/png" href="images/phoenix.png"/>
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png"/>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@400;700&display=swap" rel="stylesheet"/>
 
-<!-- Intro API（Cloudflare Worker） -->
-<script>
-  window.KEIKO_INTRO_API = "https://dic706.workers.dev/intro";
-</script>
-
+  <link rel="stylesheet" href="css/keikoba.css"/>
 </head>
+<body class="keikoba-page">
 
-<body>
-
-<header>
-  <div id="hamburger">☰</div>
-  <nav id="navMenu">
-    <a href="#top">Top</a>
-    <a href="#profile">Profile</a>
-    <a href="#lesson">Lesson</a>
-    <a href="#contact">Contact</a>
-  </nav>
+<header class="site-header">
+<img alt="鳳凰ロゴ" class="logo-small" src="images/phoenix.png"/>
+<div class="hamburger" id="hamburger" id="hamburger">
+<span></span>
+<span></span>
+</div>
 </header>
+<main class="bg-area">
+<nav class="nav-menu" id="navMenu">
+  <ul>
+    <li><a href="index.html">トップ</a></li>
+    <li><a href="#intro">はじめに</a></li>
+    <li><a href="#about">稽古について</a></li>
+    <li><a href="#profile">鳳聲晴久</a></li>
+    <li><a href="#schedule">稽古日程</a></li>
+    <li><a href="#contact">お問い合わせ</a></li>
+  </ul>
+</nav>
 
-<main>
-
-<!-- =========================
- Hero / Intro
-========================= -->
-<section id="top" class="hero">
-  <div class="intro-box">
-    <div id="introTextLines"></div>
-  </div>
+<!-- Hero -->
+<section id="home">
+  <section class="main-text" id="intro">
+<div class="text-lines">
+<div class="text-line">心静かに</div>
+<div class="text-line">音と向き合う</div>
+<div class="text-line">　</div>
+<div class="text-line">日々の喧騒を離れ、</div>
+<div class="text-line">一管の笛を通じて</div>
+<div class="text-line">自らの呼吸を整える。</div>
+</div>
+</section>
 </section>
 
-<!-- =========================
- Profile
-========================= -->
-<section id="profile">
-  <h2>Profile</h2>
-  <p>
-    鳳聲晴久。篠笛・能管奏者。<br>
-    江戸囃子を中心に、伝統と現代を横断する表現活動を行う。
-  </p>
-</section>
+<!-- Sections -->
+<div class="sections">
 
-<!-- =========================
- Lesson
-========================= -->
-<section id="lesson">
-  <h2>Lesson</h2>
-  <p>
-    個人稽古・グループ稽古対応。<br>
-    詳細はお問い合わせください。
-  </p>
+  <section class="section-block">
+    <main class="main-wrapper">
+<section class="panel" id="about">
+<h1 class="section-title">稽古について</h1>
+<p>
+      一人ひとりの呼吸に合わせた、落ち着いた個人稽古を行っています。<br/>
+      江戸囃子や長唄囃子の基礎から、笛独奏曲まで幅広く扱います。
+    </p>
+<hr class="divider"/>
+<h2 class="section-title">稽古内容</h2>
+<h3 style="margin-top:10px;">江戸囃子（笛・打楽器）</h3>
+<p>祭囃子に受け継がれる江戸のリズムを、笛と打楽器の両方から学びます。</p>
+<h3>長唄囃子（笛）</h3>
+<p>舞踊や歌舞伎のための笛の技法を中心に稽古します。</p>
+<h3>笛独奏曲（古典・現代）</h3>
+<p>音色・呼吸・表現を深める独奏曲の稽古です。</p>
+<hr class="divider"/>
+<h2 class="section-title">月会費</h2>
+<p>
+<strong>月会費：20,000円（個人稽古）</strong><br/>
+      ※ 会場費は別途ご負担いただきます。
+    </p>
+<hr class="divider"/>
+<h2 class="section-title">稽古場</h2>
+<h3>東京（中央区）</h3>
+<p>
+      月島区民館<br/>
+<a class="map-link" href="https://www.google.com/maps?q=月島区民館" rel="noopener" target="_blank">地図で見る</a>
+</p>
+<h3>千葉（佐倉市）</h3>
+<p>
+      スタジオ SAINT.D（千葉県佐倉市新町36）<br/>
+<a class="map-link" href="https://www.google.com/maps?q=千葉県佐倉市新町36" rel="noopener" target="_blank">地図で見る</a>
+</p>
+<hr class="divider"/>
+<h2 class="section-title">申し込み・見学</h2>
+<p>
+      見学は随時受付しております。<br/>
+      下記の「申し込み」よりお気軽にお問い合わせください。
+    </p>
+<div class="apply-button-wrap">
+<a class="apply-button" href="#contact">申し込み・お問い合わせ</a>
+</div>
 </section>
-
-<!-- =========================
- Contact
-========================= -->
-<section id="contact">
-  <h2>Contact</h2>
-  <p>
-    稽古のご相談・出演依頼は公式LINEよりご連絡ください。
-  </p>
-</section>
-
 </main>
+  </section>
 
-<script src="js/keikoba.js"></script>
+  <section class="section-block">
+    <main class="main-wrapper">
+<section class="profile-panel" id="profile">
+<div class="profile-hero">
+<div class="profile-photo-wrap">
+<img alt="鳳聲晴久　篠笛・能管演奏" class="profile-photo" src="images/keikobaprofile.jpg"/>
+</div>
+<div class="profile-heading">
+<h1 class="profile-name-ja">鳳聲 晴久</h1>
+<div class="profile-name-en">Haruhisa Hosei</div>
+<div class="profile-title">篠笛・能管演奏家／伝統芸能プロデューサー</div>
+</div>
+</div>
+<section>
+<h2 class="section-title">学歴・師系</h2>
+<ul class="profile-list">
+<li>東京藝術大学 音楽学部 邦楽科 卒業</li>
+<li>鳳聲流にて 若山胤雄師、鳳聲晴雄師に師事</li>
+</ul>
+</section>
+<section>
+<h2 class="section-title">活動概要</h2>
+<p>江戸囃子・神楽・長唄などの古典邦楽を中心に、国内外の舞台で演奏。現代音楽・ジャズとのコラボレーションや、地域文化継承プロジェクト、体験型のワークショップを通じて、笛の世界を次の世代へつなぐ活動を続けています。</p>
+</section>
+<section>
+<h2 class="section-title">主なプロデュース・出演</h2>
+<ul class="profile-list">
+<li>千葉県誕生150周年記念公演 松本幸四郎 歌舞伎舞踊公演「連獅子」出演・プロデュース</li>
+<li>伝統芸能スコラ「かぶきを楽しもう」プロデュース（講義・実演・楽器体験）</li>
+<li>新潟市依頼「角兵衛獅子」囃子復元プロジェクト（企画・指導）</li>
+</ul>
+</section>
+<section>
+<h2 class="section-title">稽古に込めていること</h2>
+<p>心静かに音と向き合い、呼吸の流れを整えること。<br/>技術だけでなく、「一管の笛を通じて自らの中心と出会う時間」であってほしい――その思いで、少人数制の稽古を行っています。</p>
+</section>
+</section>
+</main>
+  </section>
 
+  <section class="section-block">
+    <main class="main-wrapper">
+<section class="schedule-panel" id="schedule">
+<h1 class="schedule-title">稽古日程</h1>
+<p class="schedule-note">
+      ※日程は変更になる場合があります。最新情報はカレンダーをご確認ください。
+    </p>
+<div class="calendar-section">
+<h2 class="calendar-heading">月間予定</h2>
+<div class="calendar-wrap">
+<iframe frameborder="0" height="500" scrolling="no" src="https://calendar.google.com/calendar/embed?src=293946f64a5071c0cac1f54aa4507ba4fc5701cb8fe885d07522935b051d2955%40group.calendar.google.com&amp;ctz=Asia%2FTokyo">
+</iframe>
+</div>
+</div>
+<div class="calendar-section">
+<h2 class="calendar-heading">今後の予定リスト</h2>
+<div class="calendar-wrap">
+<iframe frameborder="0" height="400" scrolling="no" src="https://calendar.google.com/calendar/embed?src=293946f64a5071c0cac1f54aa4507ba4fc5701cb8fe885d07522935b051d2955%40group.calendar.google.com&amp;ctz=Asia%2FTokyo&amp;mode=AGENDA">
+</iframe>
+</div>
+</div>
+</section>
+</main>
+  </section>
+
+  <section class="section-block">
+    
+<main class="main-wrapper">
+<section class="panel" id="contact">
+<h1 class="section-title">お問い合わせ</h1>
+<p class="lead-text">
+        笛のお稽古のご相談・見学お申し込みなど、<br/>
+        お好きな方法でお問い合わせください。
+      </p>
+<hr class="divider"/>
+<div class="contact-cards">
+<a class="contact-card" href="mailto:contact@haruhisa-hesei.com">
+<span class="contact-label">メールで問い合わせる</span>
+<span class="contact-email">contact@haruhisa-hesei.com</span>
+<span class="contact-sub">お名前・ご希望の稽古内容・ご希望の曜日などを書き添えていただけると助かります。</span>
+</a>
+<a class="contact-card" href="https://lin.ee/Z10yG4A" rel="noopener" target="_blank">
+<span class="contact-label">LINE公式アカウント（友だち追加）</span>
+<span class="contact-sub">友だち追加のうえ、トーク画面から一言メッセージをお送りください。</span>
+</a>
+</div>
+<p class="contact-footer-text">
+        稽古のご相談・見学お申込みなど、どうぞお気軽にお問い合わせください。
+      </p>
+</section>
+</main>
+</main>
+<footer>
+    © 鳳聲晴久
+  </footer>
+
+  <script src="js/keikoba.js" defer></script>
 </body>
 </html>
