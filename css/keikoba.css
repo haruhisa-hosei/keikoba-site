@@ -600,3 +600,27 @@ section#intro.main-text{
 .main-text{
   padding-top: 40px !important;
 }
+/* ===== Intro: dynamic fade-in (JSON→DOM生成対応) ===== */
+/* 既存の .text-line の keyframes/ nth-of-type を「はじめに」だけ無効化して、
+   JSが付ける .is-show でフェードインさせる */
+#introTextLines .text-line{
+  animation: none !important;
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(1.5px);
+  transition: opacity 700ms ease, transform 700ms ease, filter 700ms ease;
+  will-change: opacity, transform, filter;
+}
+#introTextLines .text-line.is-show{
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+@media (prefers-reduced-motion: reduce){
+  #introTextLines .text-line{
+    transition: none;
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
