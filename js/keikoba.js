@@ -62,125 +62,97 @@ if (ham && nav) {
 }
 
 
-// -----------------------------
-// Omikuji (Phoenix Logo)
-// -----------------------------
-function getJSTDateString(){
-  // "YYYY-MM-DD" in Asia/Tokyo
-  const fmt = new Intl.DateTimeFormat('sv-SE', {
-    timeZone: 'Asia/Tokyo',
-    year: 'numeric', month: '2-digit', day: '2-digit'
-  });
-  return fmt.format(new Date());
-}
-
-function getPhoenixId(){
-  const key = 'phoenix_omikuji_id_v1';
-  let id = localStorage.getItem(key);
+// --- Omikuji (Phoenix Logo) ---
+function getDeviceId() {
+  const KEY = "omikuji_device_id";
+  let id = localStorage.getItem(KEY);
   if (!id) {
-    // simple random id
-    id = (crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Math.random()).slice(2) + String(Date.now());
-    localStorage.setItem(key, id);
+    id = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
+    localStorage.setItem(KEY, id);
   }
   return id;
 }
 
-function hash32(str){
-  // djb2-ish
-  let h = 5381;
-  for (let i = 0; i < str.length; i++){
-    h = ((h << 5) + h) ^ str.charCodeAt(i);
+function getTodayJST() {
+  // JST date key like 2026-01-28
+  return new Date().toLocaleDateString("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).split("/").join("-");
+}
+
+function hashCode(str) {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) {
+    h = (h << 5) - h + str.charCodeAt(i);
+    h |= 0;
   }
-  // to uint32
-  return h >>> 0;
+  return Math.abs(h);
 }
 
-function getFortunes(){
-  // ここは後でKV/JSON化も可能（いまはJS内蔵で確実に動かす）
-  return [
-    {
-      title: "大吉",
-      body: "今日は音がまっすぐ届く日。\n細かいことは気にせず、\nただ一音に集中してみましょう。\n\n──\nラッキーアイテム\n今すぐ鳳聲晴久に入門。",
-    },
-    {
-      title: "中吉",
-      body: "静けさが味方になる日。\n急がず、呼吸の幅を少しだけ広げて。\n\n──\n小さな整えが吉。",
-    },
-    {
-      title: "吉",
-      body: "今日は“間”が鍵。\n言葉よりも、余白のほうが伝わる。\n\n──\n一拍置いてから動くと良い。",
-    },
-    {
-      title: "凶",
-      body: "焦りが音を濁らせる日。\n大きく吸って、ゆっくり吐いて。\n\n──\n稽古は短くても“丁寧に”。",
-    },
-    {
-      title: "大凶",
-      body: "今日は“欲”が騒ぐ日。\n求めるほど遠ざかるので、\n一度、手を離してみましょう。\n\n──\nそれでも最後に：\n今すぐ鳳聲晴久に入門。",
-    },
-  ];
+async function pickFortuneFixed() {
+  const res = await fetch("/assets/fortunes.json?t=" + Date.now());
+  if (!res.ok) throw new Error("fortunes.json not found");
+  const fortunes = await res.json();
+  if (!Array.isArray(fortunes) || fortunes.length === 0) throw new Error("fortunes empty");
+
+  const seed = getDeviceId() + "_" + getTodayJST();
+  const idx = hashCode(seed) % fortunes.length;
+  return fortunes[idx];
 }
 
-function pickFortune(){
-  const date = getJSTDateString();
-  const id = getPhoenixId();
-  const seed = hash32(`${date}::${id}`);
-  const fortunes = getFortunes();
-  const index = seed % fortunes.length;
-  return { ...fortunes[index], date, index };
-}
+function setupOmikujiUI() {
+  const btn = document.getElementById("phoenixBtn");
+  const bubble = document.getElementById("omikujiBubble");
+  const rankEl = document.getElementById("omikujiRank");
+  const textEl = document.getElementById("omikujiText");
 
-function initOmikuji(){
-  const btn = document.getElementById('phoenixBtn');
-  const bubble = document.getElementById('omikujiBubble');
-  const titleEl = document.getElementById('omikujiTitle');
-  const bodyEl  = document.getElementById('omikujiBody');
-  const metaEl  = document.getElementById('omikujiMeta');
+  if (!btn || !bubble || !rankEl || !textEl) return;
 
-  if (!btn || !bubble || !titleEl || !bodyEl || !metaEl) return;
-
-  const show = () => {
-    const f = pickFortune();
-    titleEl.textContent = `【${f.title}】`;
-    bodyEl.textContent = f.body;
-    metaEl.textContent = `今日の呼吸：${f.date}`;
-    bubble.hidden = false;
-
-    btn.classList.add('is-glow');
-    // glow is persistent while bubble is open; remove after a moment if you prefer
+  const show = (rank, text) => {
+    rankEl.textContent = rank;
+    textEl.textContent = text;
+    bubble.classList.add("is-show");
+    bubble.setAttribute("aria-hidden", "false");
   };
 
   const hide = () => {
-    bubble.hidden = true;
-    btn.classList.remove('is-glow');
+    bubble.classList.remove("is-show");
+    bubble.setAttribute("aria-hidden", "true");
   };
-
-  const toggle = () => {
-    if (bubble.hidden) show();
-    else hide();
-  };
-
-  btn.addEventListener('click', (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    toggle();
-  });
 
   // tap outside to close
-  document.addEventListener('click', (e) => {
-    if (bubble.hidden) return;
-    if (btn.contains(e.target) || bubble.contains(e.target)) return;
-    hide();
+  document.addEventListener("click", (e) => {
+    if (bubble.classList.contains("is-show")) {
+      const inside = btn.contains(e.target) || bubble.contains(e.target);
+      if (!inside) hide();
+    }
   });
 
-  // escape to close
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !bubble.hidden) hide();
+  btn.addEventListener("click", async () => {
+    // toggle close if open
+    if (bubble.classList.contains("is-show")) {
+      hide();
+      return;
+    }
+
+    btn.classList.add("is-glow");
+
+    try {
+      const picked = await pickFortuneFixed();
+      setTimeout(() => show(picked.rank, picked.text), 800);
+    } catch (e) {
+      console.error(e);
+      setTimeout(() => show("準備中", "しばらくしてから、もう一度。"), 800);
+    } finally {
+      setTimeout(() => btn.classList.remove("is-glow"), 1500);
+    }
   });
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
   loadLatestIntro();
-  initOmikuji();
+  setupOmikujiUI();
 });
