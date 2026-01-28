@@ -701,3 +701,18 @@ section#intro.main-text{
   font-size: .85em;
   opacity: .85;
 }
+
+
+/* 鳳凰クリック時 発光 */
+.phoenix-btn.is-glow .phoenix-path{
+  filter:
+    drop-shadow(0 0 6px rgba(120,160,255,.8))
+    drop-shadow(0 0 14px rgba(120,160,255,.6))
+    drop-shadow(0 0 24px rgba(120,160,255,.4));
+  opacity: 1;
+}
+
+/* optional: slightly brighten gradient on glow */
+.phoenix-btn.is-glow #phoenixGrad stop:first-child{
+  stop-color:#1e4fa8;
+}
