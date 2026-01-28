@@ -778,3 +778,15 @@ section#intro.main-text{
   transform: translateY(-2px);
 }
 
+
+/* ===== Patch: sharper downward shadow + dark brown tone ===== */
+
+/* Override gold-state shadow: sharp +焦げ茶 */
+.phoenix-btn.is-glow .phoenix-logo,
+.phoenix-btn.is-glow svg{
+  filter:
+    drop-shadow(0 3px 2px rgba(60, 40, 20, 0.55))
+    drop-shadow(0 7px 4px rgba(90, 60, 30, 0.35));
+  transform: translateY(-2px);
+}
+
