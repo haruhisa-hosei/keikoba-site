@@ -628,6 +628,15 @@ section#intro.main-text{
   padding: 0;
   line-height: 0;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent; /* iOS tap highlight (square flash) */
+}
+
+/* remove native outlines so only the SVG's painted glow shows */
+.phoenix-btn:focus,
+.phoenix-btn:focus-visible,
+.phoenix-btn:active{
+  outline: none;
+  box-shadow: none;
 }
 
 /* size: follow existing .logo-small */
