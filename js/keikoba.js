@@ -121,6 +121,8 @@ function setupOmikujiUI() {
   const hide = () => {
     bubble.classList.remove("is-show");
     bubble.setAttribute("aria-hidden", "true");
+    // keep phoenix gold only while bubble is visible
+    btn.classList.remove("is-glow");
   };
 
   // tap outside to close
@@ -138,7 +140,7 @@ function setupOmikujiUI() {
       return;
     }
 
-    btn.classList.add("is-glow"); // gold on
+    btn.classList.add("is-glow");
 
     try {
       const picked = await pickFortuneFixed();
@@ -147,7 +149,7 @@ function setupOmikujiUI() {
       console.error(e);
       setTimeout(() => show("準備中", "しばらくしてから、もう一度。"), 800);
     } finally {
-      setTimeout(() => btn.classList.remove("is-glow"), 1500);
+      // removed: color returns to normal when bubble closes (hide())
     }
   });
 }
