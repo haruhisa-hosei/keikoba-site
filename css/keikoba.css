@@ -790,3 +790,10 @@ section#intro.main-text{
   transform: translateY(-2px);
 }
 
+
+/* ===== Patch: lift + shadow animation duration = 1s ===== */
+.phoenix-logo,
+.phoenix-btn svg{
+  transition: filter 1s ease, transform 1s ease;
+}
+
