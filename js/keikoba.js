@@ -121,7 +121,7 @@ function setupOmikujiUI() {
   const hide = () => {
     bubble.classList.remove("is-show");
     bubble.setAttribute("aria-hidden", "true");
-    // keep phoenix gold only while bubble is visible
+    // keep logo gold only while bubble is visible
     btn.classList.remove("is-glow");
   };
 
@@ -148,8 +148,6 @@ function setupOmikujiUI() {
     } catch (e) {
       console.error(e);
       setTimeout(() => show("準備中", "しばらくしてから、もう一度。"), 800);
-    } finally {
-      // removed: color returns to normal when bubble closes (hide())
     }
   });
 }
