@@ -797,3 +797,30 @@ section#intro.main-text{
   transition: filter 1s ease, transform 1s ease;
 }
 
+
+/* ===== Patch: One-shot lift + downward sharp brown shadow (return after 1s) ===== */
+
+/* keyframes: lift once, then return */
+@keyframes phoenixLiftOnce {
+  0% {
+    transform: translateY(0);
+    filter: none;
+  }
+  40% {
+    transform: translateY(-2px);
+    filter:
+      drop-shadow(0 3px 2px rgba(60, 40, 20, 0.55))
+      drop-shadow(0 7px 4px rgba(90, 60, 30, 0.35));
+  }
+  100% {
+    transform: translateY(0);
+    filter: none;
+  }
+}
+
+/* play animation once when gold state appears */
+.phoenix-btn.is-glow .phoenix-logo,
+.phoenix-btn.is-glow svg{
+  animation: phoenixLiftOnce 1s ease forwards;
+}
+
