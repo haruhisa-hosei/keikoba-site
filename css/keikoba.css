@@ -416,9 +416,7 @@ footer{
   --phoenix-grad-1: #071A3D; /* deep blue */
   --phoenix-grad-2: #0B2E73; /* blue-gray */
   --phoenix-grad-3: #3A7AE0; /* silver */
-  --phoenix-glow-gold: rgba(246,230,168,.85);
-  --phoenix-glow-sakura: rgba(255,247,242,.95);
-  --phoenix-glow: rgba(246,230,168,.65);
+  --phoenix-glow: rgba(160,200,255,.55);
 }
 html, body{ height: 100%; }
 /* assume main content wrapper is .container or main; make it flex:1 if present */
@@ -646,14 +644,13 @@ section#intro.main-text{
 .phoenix-btn .phoenix-stop2{ stop-color: var(--phoenix-grad-2); }
 .phoenix-btn .phoenix-stop3{ stop-color: var(--phoenix-grad-3); }
 
-/* tap glow (淡金 × 桜白) */
-.phoenix-btn.is-glow img{
-  filter:
-    drop-shadow(0 0 6px var(--phoenix-glow-gold))
-    drop-shadow(0 0 14px var(--phoenix-glow-sakura))
-    drop-shadow(0 0 28px var(--phoenix-glow-sakura));
+/* tap: gold gradient (no glow) */
+.phoenix-btn.is-glow{
+  /* clear, unmistakable gold gradient */
+  --phoenix-grad-1: #6B4A00; /* deep gold */
+  --phoenix-grad-2: #D6A83A; /* gold */
+  --phoenix-grad-3: #FFF1B8; /* pale gold */
 }
-
 /* speech bubble */
 .omikuji-bubble{
   position: absolute;
@@ -706,21 +703,18 @@ section#intro.main-text{
 }
 
 
-/* 鳳凰クリック時 発光（淡金 × 桜白） */
+/* 鳳凰クリック時 発光 */
 .phoenix-btn.is-glow .phoenix-path{
   filter:
-    drop-shadow(0 0 6px var(--phoenix-glow-gold))
-    drop-shadow(0 0 14px var(--phoenix-glow-sakura))
-    drop-shadow(0 0 28px var(--phoenix-glow-sakura));
+    drop-shadow(0 0 6px rgba(120,160,255,.8))
+    drop-shadow(0 0 14px rgba(120,160,255,.6))
+    drop-shadow(0 0 24px rgba(120,160,255,.4));
   opacity: 1;
 }
 
-/* optional: change gradient tones on glow
-   - if your inline SVG <stop> elements have class="phoenix-stop1/2/3"
-   - (your CSS already targets these classes in normal state)
-*/
-.phoenix-btn.is-glow .phoenix-stop1{ stop-color: #F6E6A8; } /* 淡金 */
-.phoenix-btn.is-glow .phoenix-stop2{ stop-color: #FFEFD1; } /* 淡いクリーム */
-.phoenix-btn.is-glow .phoenix-stop3{ stop-color: #FFF7F2; } /* 桜白 */
+/* optional: slightly brighten gradient on glow */
+.phoenix-btn.is-glow #phoenixGrad stop:first-child{
+  stop-color:#1e4fa8;
+}
 
 .phoenix-logo{display:block;height:28px;width:auto;}
