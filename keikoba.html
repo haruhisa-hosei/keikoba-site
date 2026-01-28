@@ -26,7 +26,14 @@
 <body class="keikoba-page">
 
 <header class="site-header">
-<img alt="鳳凰ロゴ" class="logo-small" src="images/phoenix.png"/>
+<button id="phoenixBtn" class="phoenix-btn" type="button" aria-label="おみくじ">
+  <img src="images/phoenix_logo.svg" alt="おみくじ" class="phoenix-img"/>
+</button>
+<div id="omikujiBubble" class="omikuji-bubble" aria-hidden="true">
+  <div class="omikuji-rank" id="omikujiRank"></div>
+  <div class="omikuji-text" id="omikujiText"></div>
+  <div class="omikuji-lucky">ラッキーアクション：今すぐ鳳聲晴久に入門。</div>
+</div>
 <div class="hamburger" id="hamburger">
 <span></span>
 <span></span>
