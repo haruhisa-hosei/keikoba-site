@@ -633,7 +633,7 @@ section#intro.main-text{
 }
 
 /* size: follow existing .logo-small */
-.phoenix-btn img{
+.phoenix-btn svg{
   height: 46px;
   width: auto;
   display: block;
@@ -700,4 +700,13 @@ section#intro.main-text{
   margin-top: 10px;
   font-size: .85em;
   opacity: .85;
+}
+
+
+/* size: follow existing .logo-small */
+.phoenix-btn img{
+  height: 46px;
+  width: auto;
+  min-width: 46px; /* ★重要：これを必ず足してください！ */
+  display: block;
 }
