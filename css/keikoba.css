@@ -28,8 +28,8 @@ header {
 
 /* ハンバーガーメニュー */
 .hamburger {
-    width: 14px;
-    height: 8px;
+    width: 22px;
+    height: 14px;
     position: relative;
     cursor: pointer;
     z-index: 1001;
@@ -39,7 +39,7 @@ header {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 1px;
+    height: 2px;
     background: #333;
     border-radius: 1px;
     transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
@@ -413,7 +413,11 @@ footer{
 /* ===== Patch v8: anchor landing gap (top ~50px), robust across iOS/header height ===== */
 :root{
   --header-h: 56px;
-  }
+  --phoenix-grad-1: #071A3D; /* deep blue */
+  --phoenix-grad-2: #0B2E73; /* blue-gray */
+  --phoenix-grad-3: #3A7AE0; /* silver */
+  --phoenix-glow: rgba(160,200,255,.55);
+}
 html, body{ height: 100%; }
 /* assume main content wrapper is .container or main; make it flex:1 if present */
 /* footer sticks to bottom and includes safe-area */
@@ -617,94 +621,100 @@ section#intro.main-text{
 }
 
 
-/* --- Phoenix inline SVG (CSS control) --- */
-.phoenix-area{
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-.phoenix-link{
-  display: inline-block;
+/* --- Omikuji Phoenix Logo --- */
+.phoenix-btn{
+  border: 0;
+  background: transparent;
+  padding: 0;
   line-height: 0;
-  -webkit-tap-highlight-color: transparent;
+  cursor: pointer;
 }
-.phoenix-logo{
-  height: 44px; /* ヘッダー用 */
+
+/* size: follow existing .logo-small */
+.phoenix-btn .phoenix-logo, .phoenix-btn img{
+  height: 46px;
   width: auto;
+  min-width: 46px;
   display: block;
-  overflow: visible;
-}
-@media (min-width: 480px){
-  .phoenix-logo{ height: 50px; }
 }
 
-/* 生成り背景に合う濃紺グラデーション（通常） */
-.phoenix-area{
-  --p1:#07162f;
-  --p2:#0b2a55;
-  --p3:#113a6a;
-  --p1-click:#0b2a55;
-  --p2-click:#1a4a85;
-  --p3-click:#2b6bb0;
+
+/* gradient colors (inline svg stops) */
+.phoenix-btn .phoenix-stop1{ stop-color: var(--phoenix-grad-1); }
+.phoenix-btn .phoenix-stop2{ stop-color: var(--phoenix-grad-2); }
+.phoenix-btn .phoenix-stop3{ stop-color: var(--phoenix-grad-3); }
+
+/* tap glow */
+.phoenix-btn.is-glow img{
+  filter:
+    drop-shadow(0 0 6px var(--phoenix-glow))
+    drop-shadow(0 0 14px var(--phoenix-glow));
 }
 
-/* SVG内のstopをCSS変数で制御 */
-.phoenix-logo .phoenix-stop1{ stop-color: var(--p1); }
-.phoenix-logo .phoenix-stop2{ stop-color: var(--p2); }
-.phoenix-logo .phoenix-stop3{ stop-color: var(--p3); }
-
-/* クリック時：ロゴの色だけ変える（四角い光は出さない） */
-.phoenix-area.is-clicked .phoenix-logo .phoenix-stop1{ stop-color: var(--p1-click); }
-.phoenix-area.is-clicked .phoenix-logo .phoenix-stop2{ stop-color: var(--p2-click); }
-.phoenix-area.is-clicked .phoenix-logo .phoenix-stop3{ stop-color: var(--p3-click); }
-
-/* --- Omikuji bubble --- */
+/* speech bubble */
 .omikuji-bubble{
   position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  min-width: 220px;
-  max-width: 320px;
-  padding: 12px 12px 10px;
+  top: calc(var(--header-h) + 10px);
+  left: 12px;
+  max-width: min(360px, calc(100vw - 24px));
   background: rgba(255,255,255,.92);
-  border: 1px solid rgba(20,20,20,.18);
+  border: 1px solid rgba(0,0,0,.08);
   border-radius: 14px;
+  padding: 14px 14px 12px;
   box-shadow: 0 10px 24px rgba(0,0,0,.10);
-  backdrop-filter: blur(6px);
   opacity: 0;
-  transform: translateY(-6px);
+  transform: translateY(6px);
   pointer-events: none;
-  transition: opacity .18s ease, transform .18s ease;
-  z-index: 50;
+  transition: opacity .35s ease, transform .35s ease;
 }
-.omikuji-bubble.is-show{
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
-}
+
 .omikuji-bubble::before{
   content:"";
   position:absolute;
   top:-8px;
-  left: 18px;
-  width: 14px;
-  height: 14px;
+  left: 20px;
+  width: 16px;
+  height: 16px;
   background: rgba(255,255,255,.92);
-  border-left: 1px solid rgba(20,20,20,.18);
-  border-top: 1px solid rgba(20,20,20,.18);
+  border-left: 1px solid rgba(0,0,0,.08);
+  border-top: 1px solid rgba(0,0,0,.08);
   transform: rotate(45deg);
 }
-.omikuji-title{
+
+.omikuji-bubble.is-show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.omikuji-rank{
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
+
 .omikuji-text{
-  line-height: 1.55;
-  font-size: 14px;
-  white-space: pre-line;
+  white-space: pre-wrap;
+  line-height: 1.9;
 }
-.omikuji-item{
-  margin-top: 8px;
-  font-size: 13px;
-  opacity: .9;
+
+.omikuji-lucky{
+  margin-top: 10px;
+  font-size: .85em;
+  opacity: .85;
 }
+
+
+/* 鳳凰クリック時 発光 */
+.phoenix-btn.is-glow .phoenix-path{
+  filter:
+    drop-shadow(0 0 6px rgba(120,160,255,.8))
+    drop-shadow(0 0 14px rgba(120,160,255,.6))
+    drop-shadow(0 0 24px rgba(120,160,255,.4));
+  opacity: 1;
+}
+
+/* optional: slightly brighten gradient on glow */
+.phoenix-btn.is-glow #phoenixGrad stop:first-child{
+  stop-color:#1e4fa8;
+}
+
+.phoenix-logo{display:block;height:28px;width:auto;}
