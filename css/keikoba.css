@@ -413,7 +413,11 @@ footer{
 /* ===== Patch v8: anchor landing gap (top ~50px), robust across iOS/header height ===== */
 :root{
   --header-h: 56px;
-  }
+  --phoenix-grad-1: #1f2847; /* deep blue */
+  --phoenix-grad-2: #354864; /* blue-gray */
+  --phoenix-grad-3: #a0a7b5; /* silver */
+  --phoenix-glow: rgba(160,200,255,.55);
+}
 html, body{ height: 100%; }
 /* assume main content wrapper is .container or main; make it flex:1 if present */
 /* footer sticks to bottom and includes safe-area */
@@ -614,4 +618,86 @@ section#intro.main-text{
   opacity: 1 !important;
   transform: translateY(0);
   filter: blur(0);
+}
+
+
+/* --- Omikuji Phoenix Logo --- */
+.site-header{ position: relative; }
+
+.phoenix-btn{
+  border: 0;
+  background: transparent;
+  padding: 0;
+  line-height: 0;
+  cursor: pointer;
+}
+
+/* size: follow existing .logo-small */
+.phoenix-btn svg{
+  height: 46px;
+  width: auto;
+  display: block;
+}
+
+/* gradient colors (inline svg stops) */
+.phoenix-btn .phoenix-stop1{ stop-color: var(--phoenix-grad-1); }
+.phoenix-btn .phoenix-stop2{ stop-color: var(--phoenix-grad-2); }
+.phoenix-btn .phoenix-stop3{ stop-color: var(--phoenix-grad-3); }
+
+/* tap glow */
+.phoenix-btn.is-glow svg{
+  filter:
+    drop-shadow(0 0 6px var(--phoenix-glow))
+    drop-shadow(0 0 14px var(--phoenix-glow));
+}
+
+/* speech bubble */
+.omikuji-bubble{
+  position: absolute;
+  top: calc(var(--header-h) + 10px);
+  left: 12px;
+  max-width: min(360px, calc(100vw - 24px));
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(0,0,0,.08);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+  opacity: 0;
+  transform: translateY(6px);
+  pointer-events: none;
+  transition: opacity .35s ease, transform .35s ease;
+}
+
+.omikuji-bubble::before{
+  content:"";
+  position:absolute;
+  top:-8px;
+  left: 20px;
+  width: 16px;
+  height: 16px;
+  background: rgba(255,255,255,.92);
+  border-left: 1px solid rgba(0,0,0,.08);
+  border-top: 1px solid rgba(0,0,0,.08);
+  transform: rotate(45deg);
+}
+
+.omikuji-bubble.is-show{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.omikuji-rank{
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.omikuji-text{
+  white-space: pre-wrap;
+  line-height: 1.9;
+}
+
+.omikuji-lucky{
+  margin-top: 10px;
+  font-size: .85em;
+  opacity: .85;
 }
