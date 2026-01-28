@@ -61,98 +61,85 @@ if (ham && nav) {
   });
 }
 
-
-// --- Omikuji (Phoenix Logo) ---
-function getDeviceId() {
-  const KEY = "omikuji_device_id";
-  let id = localStorage.getItem(KEY);
-  if (!id) {
-    id = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2));
-    localStorage.setItem(KEY, id);
-  }
-  return id;
-}
-
-function getTodayJST() {
-  // JST date key like 2026-01-28
-  return new Date().toLocaleDateString("ja-JP", {
-    timeZone: "Asia/Tokyo",
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit"
-  }).split("/").join("-");
-}
-
-function hashCode(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = (h << 5) - h + str.charCodeAt(i);
-    h |= 0;
-  }
-  return Math.abs(h);
-}
-
-async function pickFortuneFixed() {
-  const res = await fetch("/assets/fortunes.json?t=" + Date.now());
-  if (!res.ok) throw new Error("fortunes.json not found");
-  const fortunes = await res.json();
-  if (!Array.isArray(fortunes) || fortunes.length === 0) throw new Error("fortunes empty");
-
-  const seed = getDeviceId() + "_" + getTodayJST();
-  const idx = hashCode(seed) % fortunes.length;
-  return fortunes[idx];
-}
-
-function setupOmikujiUI() {
-  const btn = document.getElementById("phoenixBtn");
-  const bubble = document.getElementById("omikujiBubble");
-  const rankEl = document.getElementById("omikujiRank");
-  const textEl = document.getElementById("omikujiText");
-
-  if (!btn || !bubble || !rankEl || !textEl) return;
-
-  const show = (rank, text) => {
-    rankEl.textContent = rank;
-    textEl.textContent = text;
-    bubble.classList.add("is-show");
-    bubble.setAttribute("aria-hidden", "false");
-  };
-
-  const hide = () => {
-    bubble.classList.remove("is-show");
-    bubble.setAttribute("aria-hidden", "true");
-  };
-
-  // tap outside to close
-  document.addEventListener("click", (e) => {
-    if (bubble.classList.contains("is-show")) {
-      const inside = btn.contains(e.target) || bubble.contains(e.target);
-      if (!inside) hide();
-    }
-  });
-
-  btn.addEventListener("click", async () => {
-    // toggle close if open
-    if (bubble.classList.contains("is-show")) {
-      hide();
-      return;
-    }
-
-    btn.classList.add("is-glow");
-
-    try {
-      const picked = await pickFortuneFixed();
-      setTimeout(() => show(picked.rank, picked.text), 800);
-    } catch (e) {
-      console.error(e);
-      setTimeout(() => show("準備中", "しばらくしてから、もう一度。"), 800);
-    } finally {
-      setTimeout(() => btn.classList.remove("is-glow"), 1500);
-    }
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   loadLatestIntro();
-  setupOmikujiUI();
+
+  // --- Phoenix Omikuji + click color only ---
+  const phoenixLink = document.getElementById("phoenixLogo");
+  const phoenixArea = document.querySelector(".phoenix-area");
+  const bubble = document.getElementById("omikujiBubble");
+
+  const fortunes = [
+    { title: "大吉", text: "今日は音がまっすぐ届く日。\n細かいことは気にせず、ただ一音に集中してみましょう。", item: "今すぐ鳳聲晴久に入門。" },
+    { title: "中吉", text: "焦らなくて大丈夫。\n一つずつ整えるほど、運は静かに寄ってきます。", item: "温かい飲み物" },
+    { title: "吉", text: "小さな工夫が効く日。\n姿勢を一度だけ整えてから始めると良い流れ。", item: "メトロノーム" },
+    { title: "凶", text: "やることが多い日ほど、削る勇気。\n今日は“足さない”が正解。", item: "深呼吸を3回" },
+    { title: "大凶", text: "乱れが出やすい日。\n無理に押し切らず、短く締めて次につなげましょう。", item: "早寝" }
+  ];
+
+  function hashToIndex(str, mod){
+    // tiny deterministic hash
+    let h = 2166136261;
+    for (let i=0; i<str.length; i++){
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    h >>>= 0;
+    return h % mod;
+  }
+
+  function getDailyFortune(){
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth()+1).padStart(2,"0");
+    const d = String(now.getDate()).padStart(2,"0");
+    const dayKey = `${y}-${m}-${d}`;
+    const ua = navigator.userAgent || "ua";
+    const idx = hashToIndex(dayKey + "|" + ua, fortunes.length);
+    return fortunes[idx];
+  }
+
+  function showBubble(){
+    if (!bubble) return;
+    const f = getDailyFortune();
+    bubble.innerHTML = `
+      <div class="omikuji-title">【${f.title}】</div>
+      <div class="omikuji-text">${f.text}</div>
+      <div class="omikuji-item">──\nラッキーアイテム\n${f.item}</div>
+    `;
+    bubble.classList.add("is-show");
+  }
+
+  function hideBubble(){
+    bubble?.classList.remove("is-show");
+  }
+
+  function clickFlash(){
+    if (!phoenixArea) return;
+    phoenixArea.classList.add("is-clicked");
+    window.setTimeout(()=>phoenixArea.classList.remove("is-clicked"), 280);
+  }
+
+  if (phoenixLink){
+    phoenixLink.addEventListener("click", (e) => {
+      e.preventDefault(); // ロゴクリックはミニゲーム扱い
+      clickFlash();
+
+      // toggle bubble
+      if (bubble?.classList.contains("is-show")){
+        hideBubble();
+      }else{
+        showBubble();
+      }
+    });
+  }
+
+  // bubble外クリックで閉じる
+  document.addEventListener("click", (e) => {
+    if (!bubble?.classList.contains("is-show")) return;
+    const target = e.target;
+    if (phoenixArea && phoenixArea.contains(target)) return;
+    hideBubble();
+  });
+
 });
