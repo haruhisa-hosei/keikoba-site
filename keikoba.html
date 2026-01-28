@@ -26,13 +26,13 @@
 <body class="keikoba-page">
 
 <header class="site-header">
-<button id="phoenixBtn" class="phoenix-btn" type="button" aria-label="おみくじ">
-  <svg class="phoenix-logo" viewBox="0 0 121.26344 50.216801" aria-label="Phoenix Logo" role="img" xmlns="http://www.w3.org/2000/svg">
+<button id="phoenixLogo" class="logo-small phoenix-button" type="button" aria-label="鳳凰ロゴ">
+<svg class="phoenix-svg phoenix-logo" viewBox="0 0 121.26344 50.216801" aria-label="Phoenix Logo" role="img" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <linearGradient id="phoenixGrad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" class="phoenix-stop1"/>
-      <stop offset="55%" class="phoenix-stop2"/>
-      <stop offset="100%" class="phoenix-stop3"/>
+      <stop offset="0%" class="phoenix-stop1" style="stop-color:var(--phoenixStop1);" />
+      <stop offset="55%" class="phoenix-stop2" style="stop-color:var(--phoenixStop2);" />
+      <stop offset="100%" class="phoenix-stop3" style="stop-color:var(--phoenixStop3);" />
     </linearGradient>
   </defs>
   <g transform="translate(-47.128297,-44.707131)">
@@ -40,12 +40,7 @@
   </g>
 </svg>
 </button>
-<div id="omikujiBubble" class="omikuji-bubble" aria-hidden="true">
-  <div class="omikuji-rank" id="omikujiRank"></div>
-  <div class="omikuji-text" id="omikujiText"></div>
-  <div class="omikuji-lucky">ラッキーアクション：今すぐ鳳聲晴久に入門。</div>
-</div>
-<div class="hamburger" id="hamburger">
+<div class="hamburger" id="hamburger" id="hamburger">
 <span></span>
 <span></span>
 </div>
@@ -202,9 +197,9 @@
       </p>
 <hr class="divider"/>
 <div class="contact-cards">
-<a class="contact-card" href="mailto:contact@haruhisa-hosei.com">
+<a class="contact-card" href="mailto:contact@haruhisa-hesei.com">
 <span class="contact-label">メールで問い合わせる</span>
-<span class="contact-email">contact@haruhisa-hosei.com</span>
+<span class="contact-email">contact@haruhisa-hesei.com</span>
 <span class="contact-sub">お名前・ご希望の稽古内容・ご希望の曜日などを書き添えていただけると助かります。</span>
 </a>
 <a class="contact-card" href="https://lin.ee/Z10yG4A" rel="noopener" target="_blank">
