@@ -413,9 +413,9 @@ footer{
 /* ===== Patch v8: anchor landing gap (top ~50px), robust across iOS/header height ===== */
 :root{
   --header-h: 56px;
-  --phoenix-grad-1: #1f2847; /* deep blue */
-  --phoenix-grad-2: #354864; /* blue-gray */
-  --phoenix-grad-3: #a0a7b5; /* silver */
+  --phoenix-grad-1: #071A3D; /* deep blue */
+  --phoenix-grad-2: #0B2E73; /* blue-gray */
+  --phoenix-grad-3: #3A7AE0; /* silver */
   --phoenix-glow: rgba(160,200,255,.55);
 }
 html, body{ height: 100%; }
@@ -631,7 +631,7 @@ section#intro.main-text{
 }
 
 /* size: follow existing .logo-small */
-.phoenix-btn img{
+.phoenix-btn .phoenix-logo, .phoenix-btn img{
   height: 46px;
   width: auto;
   min-width: 46px;
@@ -716,3 +716,5 @@ section#intro.main-text{
 .phoenix-btn.is-glow #phoenixGrad stop:first-child{
   stop-color:#1e4fa8;
 }
+
+.phoenix-logo{display:block;height:28px;width:auto;}
