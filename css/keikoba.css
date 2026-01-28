@@ -718,3 +718,12 @@ section#intro.main-text{
 }
 
 .phoenix-logo{display:block;height:28px;width:auto;}
+
+
+/* ===== Patch: remove iOS tap highlight on phoenix logo ===== */
+.phoenix-btn{
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
