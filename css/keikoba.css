@@ -633,7 +633,7 @@ section#intro.main-text{
 }
 
 /* size: follow existing .logo-small */
-.phoenix-btn svg{
+.phoenix-btn img{
   height: 46px;
   width: auto;
   display: block;
@@ -645,7 +645,7 @@ section#intro.main-text{
 .phoenix-btn .phoenix-stop3{ stop-color: var(--phoenix-grad-3); }
 
 /* tap glow */
-.phoenix-btn.is-glow svg{
+.phoenix-btn.is-glow img{
   filter:
     drop-shadow(0 0 6px var(--phoenix-glow))
     drop-shadow(0 0 14px var(--phoenix-glow));
