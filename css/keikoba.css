@@ -704,13 +704,7 @@ section#intro.main-text{
 
 
 /* 鳳凰クリック時 発光 */
-.phoenix-btn.is-glow .phoenix-path{
-  filter:
-    drop-shadow(0 0 6px rgba(120,160,255,.8))
-    drop-shadow(0 0 14px rgba(120,160,255,.6))
-    drop-shadow(0 0 24px rgba(120,160,255,.4));
-  opacity: 1;
-}
+
 
 /* optional: slightly brighten gradient on glow */
 .phoenix-btn.is-glow #phoenixGrad stop:first-child{
@@ -824,3 +818,14 @@ section#intro.main-text{
   animation: phoenixLiftOnce 1s ease forwards;
 }
 
+
+
+/* --- Phoenix SVG layered shadow --- */
+#shadow {
+  filter: blur(6px);
+}
+
+/* Glow only on main layer when active */
+.phoenix-btn.is-glow #main{
+  filter: drop-shadow(0 0 8px rgba(120,160,255,.9));
+}
