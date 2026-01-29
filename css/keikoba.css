@@ -820,9 +820,16 @@ section#intro.main-text{
 
 
 
-/* --- Phoenix SVG layered shadow --- */
-#shadow {
+/* --- Phoenix SVG layered shadow (hidden by default) --- */
+#shadow{
   filter: blur(6px);
+  opacity: 0;                 /* 普段は見えない */
+  transition: opacity .25s ease;
+}
+
+/* クリック時だけ影を出す */
+.phoenix-btn.is-glow #shadow{
+  opacity: .35;              /* 影の濃さはここ */
 }
 
 /* Glow only on main layer when active */
