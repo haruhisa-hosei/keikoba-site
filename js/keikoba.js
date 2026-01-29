@@ -83,24 +83,58 @@ function getTodayJST() {
   }).split("/").join("-");
 }
 
+// 32-bit unsigned hash (stable, good for seeded randomness)
 function hashCode(str) {
   let h = 0;
   for (let i = 0; i < str.length; i++) {
     h = (h << 5) - h + str.charCodeAt(i);
-    h |= 0;
+    h |= 0; // keep as 32-bit signed
   }
-  return Math.abs(h);
+  return (h >>> 0); // convert to unsigned 32-bit
+}
+
+// seed → [0, 1) の疑似乱数（端末×日付で固定）
+function seededUnit(seed) {
+  const h = hashCode(seed);          // 0..2^32-1
+  return h / 4294967296;             // 2^32
+}
+
+// 正規分布（N(0,1)）を5段階に離散化したときの累積確率で判定
+// しきい値は z=-1.5,-0.5,0.5,1.5 のCDFを採用（左右対称）
+// 目安：大凶 6.7% / 凶 24.2% / 吉 38.2% / 中吉 24.2% / 大吉 6.7%
+function rankFromUnitCDF(u) {
+  if (u < 0.0668) return "大凶";
+  if (u < 0.3085) return "凶";
+  if (u < 0.6915) return "吉";
+  if (u < 0.9332) return "中吉";
+  return "大吉";
 }
 
 async function pickFortuneFixed() {
   const res = await fetch("/assets/fortunes.json?t=" + Date.now());
   if (!res.ok) throw new Error("fortunes.json not found");
-  const fortunes = await res.json();
+
+  const data = await res.json();
+
+  // 互換：配列 or { fortunes:[...] } or { candidates:[...] }
+  const fortunes = Array.isArray(data) ? data : (data.fortunes || data.candidates || []);
   if (!Array.isArray(fortunes) || fortunes.length === 0) throw new Error("fortunes empty");
 
+  // ★ 端末ID × 今日の日付で「その日固定」を維持
   const seed = getDeviceId() + "_" + getTodayJST();
-  const idx = hashCode(seed) % fortunes.length;
-  return fortunes[idx];
+
+  // ★ ただし、出目確率は「正規分布（吉が多く、大吉大凶がレア）」に歪める
+  const u = seededUnit(seed);
+  const targetRank = rankFromUnitCDF(u);
+
+  // ランク一致を探す（見つからなければ「吉」→中央→先頭の順で保険）
+  const hit =
+    fortunes.find(x => x && x.rank === targetRank) ||
+    fortunes.find(x => x && x.rank === "吉") ||
+    fortunes[Math.floor(fortunes.length / 2)] ||
+    fortunes[0];
+
+  return hit;
 }
 
 function setupOmikujiUI() {
