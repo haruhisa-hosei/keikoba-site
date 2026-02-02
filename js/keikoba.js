@@ -150,6 +150,25 @@ function setupOmikujiUI() {
     textEl.textContent = text;
     bubble.classList.add("is-show");
     bubble.setAttribute("aria-hidden", "false");
+
+    // ---- notify "bubble shown" (does not depend on click) ----
+    // 1) Dispatch a DOM event for debugging / future hooks
+    try {
+      document.dispatchEvent(new CustomEvent("omikuji:shown", {
+        detail: { rank: String(rank || ""), text: String(text || "") }
+      }));
+    } catch (e) {}
+
+    // 2) Send GA4 event if available (queue-safe: creates stub to avoid silent no-op)
+    try {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+      window.gtag("event", "omikuji_shown", {
+        omikuji_rank: String(rank || ""),
+        event_category: "engagement",
+        event_label: "bubble"
+      });
+    } catch (e) {}
   };
 
   const hide = () => {
@@ -168,25 +187,6 @@ function setupOmikujiUI() {
   });
 
   btn.addEventListener("click", async () => {
-  // GA4: omikuji open（沈黙しない・UIを壊さない）
-  try {
-    (window.gtag || function () {
-      (window.dataLayer = window.dataLayer || []).push(arguments);
-    })('event', 'omikuji_open', {
-      event_category: 'engagement',
-      event_label: 'phoenix'
-    });
-  } catch (e) {
-    console.warn('GA4 event failed:', e);
-  }
-
-  if (typeof gtag === "function") {
-    gtag('event', 'omikuji_open', {
-      event_category: 'engagement',
-      event_label: 'phoenix'
-    });
-  }
-
     // toggle close if open
     if (bubble.classList.contains("is-show")) {
       hide();
