@@ -3,30 +3,6 @@
 const ham = document.getElementById('hamburger');
 const nav = document.getElementById('navMenu');
 
-
-// -----------------------------
-// GA4 helper (safe + non-breaking)
-// -----------------------------
-function trackGA4(eventName, params = {}) {
-  try {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", eventName, params);
-      return true;
-    }
-    // Fallback: push to dataLayer (useful if gtag loads a bit later / GTM setups)
-    if (Array.isArray(window.dataLayer)) {
-      window.dataLayer.push({ event: eventName, ...params });
-      return true;
-    }
-    console.warn("[GA4] gtag/dataLayer not ready:", eventName, params);
-    return false;
-  } catch (e) {
-    console.warn("[GA4] track error:", e);
-    return false;
-  }
-}
-
-
 // -----------------------------
 // Intro (LINE → Worker → Site)
 // -----------------------------
@@ -174,24 +150,12 @@ function setupOmikujiUI() {
     textEl.textContent = text;
     bubble.classList.add("is-show");
     bubble.setAttribute("aria-hidden", "false");
-  
-
-  // ★ Track "bubble shown" (the real open moment)
-  if (!bubble.dataset.gaOpened) {
-    trackGA4("omikuji_open", {
-      event_category: "engagement",
-      event_label: "bubble"
-    });
-    bubble.dataset.gaOpened = "1";
-  }
-};
+  };
 
   const hide = () => {
     bubble.classList.remove("is-show");
     bubble.setAttribute("aria-hidden", "true");
-    
-  delete bubble.dataset.gaOpened;
-// keep logo gold only while bubble is visible
+    // keep logo gold only while bubble is visible
     btn.classList.remove("is-glow");
   };
 
@@ -204,6 +168,13 @@ function setupOmikujiUI() {
   });
 
   btn.addEventListener("click", async () => {
+  if (typeof gtag === "function") {
+    gtag('event', 'omikuji_open', {
+      event_category: 'engagement',
+      event_label: 'phoenix'
+    });
+  }
+
     // toggle close if open
     if (bubble.classList.contains("is-show")) {
       hide();
