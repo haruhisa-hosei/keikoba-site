@@ -168,6 +168,13 @@ function setupOmikujiUI() {
   });
 
   btn.addEventListener("click", async () => {
+  if (typeof gtag === "function") {
+    gtag('event', 'omikuji_open', {
+      event_category: 'engagement',
+      event_label: 'phoenix'
+    });
+  }
+
     // toggle close if open
     if (bubble.classList.contains("is-show")) {
       hide();
