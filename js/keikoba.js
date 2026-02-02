@@ -3,30 +3,6 @@
 const ham = document.getElementById('hamburger');
 const nav = document.getElementById('navMenu');
 
-
-// -----------------------------
-// GA4 helper (safe + non-breaking)
-// -----------------------------
-function trackGA4(eventName, params = {}) {
-  try {
-    if (typeof window.gtag === "function") {
-      window.gtag("event", eventName, params);
-      return true;
-    }
-    // Fallback: push to dataLayer (useful if gtag loads a bit later / GTM setups)
-    if (Array.isArray(window.dataLayer)) {
-      window.dataLayer.push({ event: eventName, ...params });
-      return true;
-    }
-    console.warn("[GA4] gtag/dataLayer not ready:", eventName, params);
-    return false;
-  } catch (e) {
-    console.warn("[GA4] track error:", e);
-    return false;
-  }
-}
-
-
 // -----------------------------
 // Intro (LINE → Worker → Site)
 // -----------------------------
@@ -169,89 +145,65 @@ function setupOmikujiUI() {
 
   if (!btn || !bubble || !rankEl || !textEl) return;
 
-  // ---- GA4 helper: 必ず window.gtag を参照する（スコープ問題回避）
-  const trackGA4 = (eventName, params = {}) => {
-    try {
-      const g = window.gtag;
-      if (typeof g === "function") {
-        g("event", eventName, params);
-        return true;
-      }
-    } catch (_) {}
-    return false;
-  };
-
-  // ---- 連打/二重発火対策
-  let openingLock = false;   // 取得〜表示までの間の再入を止める
-  let openToken = 0;         // 非同期の古い結果を破棄するためのトークン
-  let firedThisOpen = false; // 「この1回のオープン」につき1回だけ計測
-
   const show = (rank, text) => {
-    rankEl.textContent = rank || "";
-    textEl.textContent = text || "";
+    rankEl.textContent = rank;
+    textEl.textContent = text;
     bubble.classList.add("is-show");
-
-    // ★ここで「吹き出しが出た」ことを計測（1オープン=1回）
-    if (!firedThisOpen) {
-      firedThisOpen = true;
-      trackGA4("omikuji_open", { ui: "bubble", source: "phoenixBtn" });
-    }
+    bubble.setAttribute("aria-hidden", "false");
   };
 
   const hide = () => {
     bubble.classList.remove("is-show");
-    openingLock = false;
-    firedThisOpen = false;
-    // 以降の遅延showを無効化
-    openToken++;
+    bubble.setAttribute("aria-hidden", "true");
+    // keep logo gold only while bubble is visible
+    btn.classList.remove("is-glow");
   };
 
-  // 吹き出しの外側をタップで閉じる
-  document.addEventListener("pointerdown", (e) => {
-    if (!bubble.classList.contains("is-show")) return;
-    if (bubble.contains(e.target) || btn.contains(e.target)) return;
-    hide();
-  }, { passive: true });
+  // tap outside to close
+  document.addEventListener("click", (e) => {
+    if (bubble.classList.contains("is-show")) {
+      const inside = btn.contains(e.target) || bubble.contains(e.target);
+      if (!inside) hide();
+    }
+  });
 
-  // iOSの「click二重発火」や遅延を避けるため pointerup を採用
-  btn.addEventListener("pointerup", async (e) => {
-    e.preventDefault();
+  btn.addEventListener("click", async () => {
+  // GA4: omikuji open（沈黙しない・UIを壊さない）
+  try {
+    (window.gtag || function () {
+      (window.dataLayer = window.dataLayer || []).push(arguments);
+    })('event', 'omikuji_open', {
+      event_category: 'engagement',
+      event_label: 'phoenix'
+    });
+  } catch (e) {
+    console.warn('GA4 event failed:', e);
+  }
 
-    // すでに表示中なら閉じる
+  if (typeof gtag === "function") {
+    gtag('event', 'omikuji_open', {
+      event_category: 'engagement',
+      event_label: 'phoenix'
+    });
+  }
+
+    // toggle close if open
     if (bubble.classList.contains("is-show")) {
       hide();
       return;
     }
 
-    // 表示準備中（取得中）に再度押されたら無視
-    if (openingLock) return;
-    openingLock = true;
-
-    // このオープンのトークン
-    const myToken = ++openToken;
-    firedThisOpen = false;
+    btn.classList.add("is-glow");
 
     try {
-      const { rank, text } = await pickFortuneFixed();
-
-      // 取得中に「別のオープン/クローズ」が起きていたら破棄
-      if (myToken !== openToken) return;
-
-      // アニメーションのタイミングに合わせて表示
-      window.setTimeout(() => {
-        if (myToken !== openToken) return;
-        show(rank, text);
-        // 表示が確定したのでロック解除（閉じるまでは「表示中」判定で制御）
-        openingLock = false;
-      }, 800);
-
-    } catch (err) {
-      console.error("Omikuji fetch failed:", err);
-      openingLock = false;
+      const picked = await pickFortuneFixed();
+      setTimeout(() => show(picked.rank, picked.text), 800);
+    } catch (e) {
+      console.error(e);
+      setTimeout(() => show("準備中", "しばらくしてから、もう一度。"), 800);
     }
   });
 }
-
 
 document.addEventListener('DOMContentLoaded', () => {
   loadLatestIntro();
