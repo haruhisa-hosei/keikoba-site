@@ -26,6 +26,12 @@
   
     gtag('config', 'G-WNM16MWYJC');
   </script>
+  <script>
+    // Self analytics (first-party)
+    window.SELF_EVENT_API = "https://analytics-worker.dic706.workers.dev/event";
+    window.SELF_SITE = "main";
+  </script>
+
 </head>
 
 <body>
@@ -79,5 +85,32 @@
   </a>
 
   <script src="js/index.js" defer></script>
+
+  <script>
+  (function () {
+    try {
+      var dnt = (navigator && (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack)) || "0";
+      if (String(dnt) === "1" || String(dnt).toLowerCase() === "yes") return;
+      var api = (window.SELF_EVENT_API && String(window.SELF_EVENT_API)) || "/event";
+      var site = (window.SELF_SITE && String(window.SELF_SITE)) || "main";
+      var startPerf = (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
+      function send(payload, keepalive) {
+        fetch(api, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload || {}),
+          keepalive: !!keepalive
+        }).catch(function(){});
+      }
+      send({ site: site, type: "pageview", name: "page", path: location.pathname + location.search, ref: document.referrer || "", ts: Date.now() });
+      function leave() {
+        var dur = (typeof performance !== "undefined" && performance.now) ? Math.max(0, Math.round(performance.now() - startPerf)) : 0;
+        send({ site: site, type: "page_leave", name: "page", path: location.pathname + location.search, ref: document.referrer || "", ts: Date.now(), data: { dur_ms: dur } }, true);
+      }
+      window.addEventListener("pagehide", leave);
+      document.addEventListener("visibilitychange", function(){ if (document.visibilityState === "hidden") leave(); });
+    } catch (e) {}
+  })();
+  </script>
 </body>
 </html>
