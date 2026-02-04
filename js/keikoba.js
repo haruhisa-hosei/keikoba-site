@@ -3,6 +3,83 @@
 const ham = document.getElementById('hamburger');
 const nav = document.getElementById('navMenu');
 
+
+// -----------------------------
+// Self Analytics (first-party)
+// -----------------------------
+// Requires in HTML:
+//   window.SELF_EVENT_API = "https://<analytics-worker>/event"   (or relative "/event")
+//   window.SELF_SITE = "keikoba" | "main"
+const __SELF_START_TS = Date.now();
+const __SELF_START_PERF = (typeof performance !== "undefined" && performance.now) ? performance.now() : 0;
+
+function getSelfEventApi() {
+  return (window.SELF_EVENT_API && String(window.SELF_EVENT_API)) || "/event";
+}
+function getSelfSite() {
+  return (window.SELF_SITE && String(window.SELF_SITE)) || "keikoba";
+}
+function canSendSelf() {
+  try {
+    // Respect Do Not Track when enabled
+    const dnt = (navigator && (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack)) || "0";
+    if (String(dnt) === "1" || String(dnt).toLowerCase() === "yes") return false;
+  } catch (_) {}
+  return true;
+}
+
+function sendSelfEvent(payload, keepalive = false) {
+  try {
+    if (!canSendSelf()) return;
+    const api = getSelfEventApi();
+    const body = JSON.stringify(payload || {});
+    fetch(api, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body,
+      keepalive: !!keepalive,
+    }).catch(() => {});
+  } catch (_) {}
+}
+
+function selfPageview() {
+  sendSelfEvent({
+    site: getSelfSite(),
+    type: "pageview",
+    name: "page",
+    path: location.pathname + location.search,
+    ref: document.referrer || "",
+    ts: Date.now(),
+  });
+}
+
+function selfPageLeave() {
+  const durMs = (typeof performance !== "undefined" && performance.now) ? Math.max(0, Math.round(performance.now() - __SELF_START_PERF)) : Math.max(0, Date.now() - __SELF_START_TS);
+  sendSelfEvent(
+    {
+      site: getSelfSite(),
+      type: "page_leave",
+      name: "page",
+      path: location.pathname + location.search,
+      ref: document.referrer || "",
+      ts: Date.now(),
+      data: { dur_ms: durMs },
+    },
+    true
+  );
+}
+
+// fire pageview once
+document.addEventListener("DOMContentLoaded", () => {
+  selfPageview();
+});
+
+// fire leave (best-effort)
+window.addEventListener("pagehide", selfPageLeave);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") selfPageLeave();
+});
+
 // -----------------------------
 // Intro (LINE → Worker → Site)
 // -----------------------------
@@ -184,10 +261,31 @@ function setupOmikujiUI() {
     });
   }
 
+    // SELF analytics: open
+    sendSelfEvent({
+      site: getSelfSite(),
+      type: "omikuji_open",
+      name: "phoenix-omikuji",
+      path: location.pathname + location.search,
+      ref: document.referrer || "",
+      ts: Date.now(),
+    });
+
     btn.classList.add("is-glow");
 
     try {
       const picked = await pickFortuneFixed();
+
+      // SELF analytics: result (C)
+      sendSelfEvent({
+        site: getSelfSite(),
+        type: "omikuji_result",
+        name: "phoenix-omikuji",
+        path: location.pathname + location.search,
+        ref: document.referrer || "",
+        ts: Date.now(),
+        data: { fortune: picked && picked.rank ? picked.rank : "" },
+      });
       setTimeout(() => show(picked.rank, picked.text), 800);
     } catch (e) {
       console.error(e);
